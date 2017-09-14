@@ -2,7 +2,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE procedure [dbo].[spsavebaneditlog]                                              
+CREATE procedure [dbo].[spsavebaneditlog2]                                              
   @mbnumber varchar(100),                                              
   @loginid   varchar(20),                                              
   @edittype  varchar(20)                                              
@@ -10,7 +10,7 @@ as
 /*
   by Mark 2015-9-20 
   将 insert into ban_makebill_head_log  等14条插入语句，
---修改为 insert into dsg_log.dbo.ban_makebill_head_log
+--修改为 insert into ban_makebill_head_log
 */                                         
 begin                                            
   declare @ver int                                         
@@ -20,7 +20,7 @@ begin
                           
  --1.板单头                                            
  --insert into ban_makebill_head_log  
- insert into dsg_log.dbo.ban_makebill_head_log                                          
+ insert into ban_makebill_head_log                                          
  (banno,bantypeid,bantypename,boxmarkremark,clothremark,clothverremark,confirmdate,confirmflag,confirmuser,costamt,costprice,                                          
 countitemuser,custid,custname,designnm,devdept,dosamplenm,estimatedate,flconfirmdate,flconfirmflag,flconfirmuser,goodsperiod,                                          
 indate,indept,inuser,itemremark,itemverremark,justboxmark,lockdate,lockuser,lockusername,matioid,                                          
@@ -82,7 +82,7 @@ pyflag, pianyinflag, zhirongflag, tazuanflag, yinhuaotherflag, mjxflag, shenxfla
                                             
  --2.物料清单                                            
  --insert into ban_makebill_itemlist_log
- insert into dsg_log.dbo.ban_makebill_itemlist_log
+ insert into ban_makebill_itemlist_log
  (afterjumprule,assigncolorcaseid,assigncolorid,assignsizeid,assigntype,basesize,basesizeuseqty,clothpactid,                                          
 colorrate,colortype,consultmodel,costprice,des,des1,des10,des2,des3,des4,des5,des6,des7,des8,des9,element,extendsrateh,extendsratev,                                          
 extractqty,fgweight,gweight,ifcasesize,ifmao,isaffirm,isfillcamlet,ispastesample,isupdatesizenum,item_code,item_desc,itemtype,itemtypedesc,                                          
@@ -108,7 +108,7 @@ remotematcode,remotematname,des3name,partidname,dlqty,purgroup,matsizeid,dhqhbfl
                                    
  --3.物料清单颜色                                            
  --insert into ban_makebill_itemcolor_log
- insert into dsg_log.dbo.ban_makebill_itemcolor_log
+ insert into ban_makebill_itemcolor_log
  (cupno,isassigncolor,item_code,item_desc,itemcolordesc,itemcolorid,lsh,mb_line,mb_number,                                          
 modifydate,modifydes,modifynm,stampcolordesc,stampcolorid,stylecolordesc,stylecolorid,washedcolordesc,washedcolorid,                            
 digestionstoreflag,digestionstockflag ,ishasbbflag, editusername,editdatetime,edittype,editver)                                              
@@ -120,14 +120,14 @@ digestionstoreflag,digestionstockflag ,ishasbbflag,@loginid,GETDATE(), @edittype
                           
  --4.物料清单图片                                            
  --insert into ban_makebill_itemlist_pic_log   
- insert into dsg_log.dbo.ban_makebill_itemlist_pic_log                                            
+ insert into ban_makebill_itemlist_pic_log                                            
  select *,@loginid,GETDATE(), @edittype,@ver                                              
  from ban_makebill_itemlist_pic (nolock) where mb_number=@mbnumber                                             
                                         
                                            
  --5.数量                                            
  --insert into ban_makebill_goods_log
- insert into dsg_log.dbo.ban_makebill_goods_log
+ insert into ban_makebill_goods_log
  (color_desc,color_name,custcolorname,mb_line,mb_number,qty,remark,size1,size10,size11,size12,size13,                                          
 size14,size15,size16,size17,size18,size19,size2,size20,size3,size4,size5,size6,size7,size8,size9,          
 istouban,iscancelcolor,isqs,          
@@ -141,7 +141,7 @@ istouban,iscancelcolor,isqs,
                                              
  --6.嵌套配方                                            
  --insert into ban_makebill_qiantao_log
- insert into dsg_log.dbo.ban_makebill_qiantao_log
+ insert into ban_makebill_qiantao_log
  (assigncolor,des3,element,ifcase,item_code,item_desc,itemtype,mb_itemline,mb_line,mb_number,                                          
 modifydes,partid,posid,posname,remark,qsize1,qsize10,qsize11,qsize12,qsize13,qsize14,qsize15,qsize16,qsize17,qsize18,qsize19,qsize2,qsize20,                                          
 qsize3,qsize4,qsize5,qsize6,qsize7,qsize8,qsize9,sourcetype,unit,wasterate,msize1,msize10,msize11,msize12,msize13,msize14,msize15,msize16,                                          
@@ -154,7 +154,7 @@ msize17,msize18,msize19,msize2,msize20,msize3,msize4,msize5,msize6,msize7,msize8
                                              
  --7.嵌套第三层                                            
  --insert into ban_makebill_qiantao_detail_log
- insert into dsg_log.dbo.ban_makebill_qiantao_detail_log
+ insert into ban_makebill_qiantao_detail_log
  (mb_number,mb_itemline,mb_line,mb_colorline,isassigncolor,item_code,item_desc,itemtype,parentcolorid,                                          
  parentcolorname,colorid,colorname,modifydes,modifynm,modifydate,editusername,editdatetime,edittype,editver)                                      
  select mb_number,mb_itemline,mb_line,mb_colorline,isassigncolor,item_code,item_desc,itemtype,parentcolorid,                                          
@@ -164,7 +164,7 @@ msize17,msize18,msize19,msize2,msize20,msize3,msize4,msize5,msize6,msize7,msize8
                                               
  --8.充绒充棉明细                                            
  --insert into ban_makebill_chrdetail_log
- insert into dsg_log.dbo.ban_makebill_chrdetail_log
+ insert into ban_makebill_chrdetail_log
  (chtype,item_code,jumptimes,mb_number,mb_line,posid,posname,size1,size10,size11,size12,size13,size14,                                          
 size15,size16,size17,size18,size19,size2,size20,size3,size4,size5,size6,size7,size8,size9,          
 vermodify,orderid,          
@@ -178,7 +178,7 @@ vermodify,orderid,
                                                         
  --9.充绒充棉头                                             
  --insert into ban_makebill_chrhead_log
- insert into dsg_log.dbo.ban_makebill_chrhead_log
+ insert into ban_makebill_chrhead_log
  (caftbasesize,cbefbasesize,chtype,confirmdate,confirmflag,confirmuser,cravgqty,crtype,                                          
 element,indate,inuser,item_code,jumpsize,jumptimes,jumpvalue1,jumpvalue2,mb_number,mb_line,mcmbasesize,mcrbasesize,pengsong,remark,                                          
 sizegroup,styleno,wcmbasesize,wcrbasesize,jumpsize2,          
@@ -192,7 +192,7 @@ sizegroup,styleno,wcmbasesize,wcrbasesize,jumpsize2,
                                             
  --10.BOM                                            
  --insert into ban_makebill_bom_log
- insert into dsg_log.dbo.ban_makebill_bom_log
+ insert into ban_makebill_bom_log
  (bansize,bomid,costprice,costtotal,element,gweight,item_code,item_desc,itemcolordesc,itemcolorid,                                          
 itemtype,itemtypedesc,matioid,mb_number,model,partid,sourcetype,sourcetypedesc,stampcolordesc,stampcolorid,stylecolordesc,                                          
 stylecolorid,styleno,sumqty,unit,useqty,washedcolordesc,washedcolorid,wasterate,          
@@ -208,7 +208,7 @@ goodsqty,sjqty,qtymiss,qtyother,
                                           
  --11.图片                                            
  --insert into ban_makebill_picture_log
- insert into dsg_log.dbo.ban_makebill_picture_log
+ insert into ban_makebill_picture_log
  (mb_number,mb_line,pictureid,modifydate,remark,editusername,editdatetime,                  
  edittype,editver)                                              
  select mb_number,mb_line,pictureid,modifydate,remark,@loginid,GETDATE(), @edittype ,@ver                                             
@@ -217,7 +217,7 @@ goodsqty,sjqty,qtymiss,qtyother,
                                                
  --12.尺寸指示                                            
  --insert into ban_makebill_sizedes_log
- insert into dsg_log.dbo.ban_makebill_sizedes_log
+ insert into ban_makebill_sizedes_log
  (aallowerrrange,allowerrrange,asize1,asize10,asize11,asize12,asize13,asize14,asize15,asize16,                                          
 asize17,asize18,asize19,asize2,asize20,asize3,asize4,asize5,asize6,asize7,asize8,asize9,dufa,item_code,item_desc,itemtype,                                          
 jumpgroup,jumpgrouprule,jumprule_aft,jumprule_bef,mb_line,mb_number,orderid,picturcode,remark,size1,size10,size11,size12,size13,                                          
@@ -235,14 +235,14 @@ washedrealcc,jm,jmname,szseriesid,szseriesconfirm,
                                             
  --13.尺寸指示明细                                            
  --insert into ban_makebill_sizedesc_pic_log    
- insert into dsg_log.dbo.ban_makebill_sizedesc_pic_log                                           
+ insert into ban_makebill_sizedesc_pic_log                                           
  select *,@loginid,GETDATE(), @edittype ,@ver                                             
  from ban_makebill_sizedesc_pic (nolock) where mb_number=@mbnumber                                        
                                             
                                           
  --14.工艺指示明细                                            
  --insert into ban_makebill_workdes_log   
- insert into dsg_log.dbo.ban_makebill_workdes_log                                        
+ insert into ban_makebill_workdes_log                                        
  (cailiaofenlei,chezhong,colororder,dadici,dadidao,des1,des10,des11,des12,des2,des3,des4,des5,des6,des7,des8,des9,                                          
  dibutyci,fszs,gmci,gmdao,gongxu,grdegree,grzhuan,gy,gyid,gyyaodian,jfxl,jg,mark,mb_line,mb_number,mianbutyci,modifydate,                                          
  modifydes,modifynm,orderid,pictureid,process,shouxiu,swzf,tb,tscolor,tydegree,tytime,tzcolorid,usrnm,vlsh,ysci,ysdao,zhenshu,                                          
