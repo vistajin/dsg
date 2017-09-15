@@ -16,12 +16,15 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Scanner;
 
 import javax.imageio.IIOImage;
@@ -47,7 +50,8 @@ public class SqlServerUtils {
             System.out.println("1. Insert new image to table");
             System.out.println("2. Compress image in table");
             System.out.println("3. Get image from table");
-            System.out.println("4. Exit");
+            System.out.println("4. Call spsavebaneditlog");
+            System.out.println("5. Exit");
             System.out.print("> ");
             String action = scanner.next();
             switch (action) {
@@ -64,6 +68,32 @@ public class SqlServerUtils {
                 getImageData(Integer.parseInt(scanner.next()));
                 break;
             case "4":
+                System.out.print("\nStart Call spsavebaneditlog ...");
+
+                List<Thread> threads = new ArrayList<Thread>();
+                SqlServerUtils ss = new SqlServerUtils();
+                for (int i = 0; i < 100; i++) {
+                    Runnable task = ss.new SPRunable();
+                    Thread worker = new Thread(task);
+                    worker.setName(String.valueOf(i));
+                    worker.start();
+                    threads.add(worker);
+                }
+                int running = 0;
+                do {
+                    running = 0;
+                    for (Thread thread : threads) {
+                        if (thread.isAlive()) {
+                            running++;
+                        }
+                    }
+                    System.out.println("We have " + running + " running threads. ");
+                } while (running > 0);
+
+                // callStoreProcedure();
+                System.out.print("\nEnd Call spsavebaneditlog\n");
+                break;
+            case "5":
                 scanner.close();
                 System.out.print("bye");
                 System.exit(0);
@@ -71,6 +101,23 @@ public class SqlServerUtils {
             default:
                 System.err.println("Invalid action, please enter again!");
             }
+        }
+    }
+
+    public static void callStoreProcedure() {
+        Connection conn = null;
+        try {
+            conn = getConnection();
+            CallableStatement cs = conn.prepareCall("{call spsavebaneditlog(?,?,?)}");
+            cs.setString(1, "123");
+            cs.setString(2, "Vista Java");
+            cs.setString(3, "Add");
+            cs.executeUpdate();
+        } catch (Exception e) {
+            System.err.println("Failed to callStoreProcedure spsavebaneditlog.");
+            e.printStackTrace();
+        } finally {
+            closeConnection(conn);
         }
     }
 
@@ -104,7 +151,8 @@ public class SqlServerUtils {
             conn = getConnection();
             File file = new File(img);
             FileInputStream fis = new FileInputStream(file);
-            pstmt = conn.prepareStatement("insert into t_img values(?)");
+            //pstmt = conn.prepareStatement("insert into t_img values(?)");
+            pstmt = conn.prepareStatement("update ban_makebill_picture set picture=? where mb_number='123'");
             pstmt.setBinaryStream(1, fis, (int) file.length());
             pstmt.executeUpdate();
             System.out.println("Saved new image to table successfully: " + img + "\n");
@@ -183,7 +231,7 @@ public class SqlServerUtils {
                 writer.write(null, new IIOImage(image, null, null), param);
                 ps.close();
 
-                FileInputStream fis = new FileInputStream(compressedImageFile);                
+                FileInputStream fis = new FileInputStream(compressedImageFile);
                 ps = conn.prepareStatement("update t_img set img=? where id=?");
                 ps.setBinaryStream(1, fis, (int) compressedImageFile.length());
                 ps.setInt(2, id);
@@ -196,6 +244,14 @@ public class SqlServerUtils {
         } finally {
             closeStatement(ps);
             closeConnection(conn);
+        }
+    }
+
+
+    class SPRunable implements Runnable {
+        @Override
+        public void run() {
+            SqlServerUtils.callStoreProcedure();
         }
     }
 }
