@@ -1,0 +1,60 @@
+Failed to callMaterialStoreProcedure spMaterialByBatchID.
+Call spMaterialByBatchID on thread id(37) takes 2447s
+Failed to callMaterialStoreProcedure spMaterialByBatchID.
+Call spMaterialByBatchID on thread id(24) takes 2449s
+com.microsoft.sqlserver.jdbc.SQLServerException: 查询处理器未能为执行并行查询启动必要的线程资源。
+	at com.microsoft.sqlserver.jdbc.SQLServerException.makeFromDatabaseError(SQLServerException.java:258)
+	at com.microsoft.sqlserver.jdbc.SQLServerStatement.getNextResult(SQLServerStatement.java:1535)
+	at com.microsoft.sqlserver.jdbc.SQLServerPreparedStatement.doExecutePreparedStatement(SQLServerPreparedStatement.java:467)
+	at com.microsoft.sqlserver.jdbc.SQLServerPreparedStatement$PrepStmtExecCmd.doExecute(SQLServerPreparedStatement.java:409)
+	at com.microsoft.sqlserver.jdbc.TDSCommand.execute(IOBuffer.java:7151)
+	at com.microsoft.sqlserver.jdbc.SQLServerConnection.executeCommand(SQLServerConnection.java:2478)
+	at com.microsoft.sqlserver.jdbc.SQLServerStatement.executeCommand(SQLServerStatement.java:219)
+	at com.microsoft.sqlserver.jdbc.SQLServerStatement.executeStatement(SQLServerStatement.java:199)
+	at com.microsoft.sqlserver.jdbc.SQLServerPreparedStatement.executeUpdate(SQLServerPreparedStatement.java:356)
+	at SqlServerUtils.callMaterialStoreProcedure(SqlServerUtils.java:163)
+	at SqlServerUtils$SPMaterialRunable.run(SqlServerUtils.java:311)
+	at java.lang.Thread.run(Thread.java:745)
+com.microsoft.sqlserver.jdbc.SQLServerException: 查询处理器未能为执行并行查询启动必要的线程资源。
+	at com.microsoft.sqlserver.jdbc.SQLServerException.makeFromDatabaseError(SQLServerException.java:258)
+	at com.microsoft.sqlserver.jdbc.SQLServerStatement.getNextResult(SQLServerStatement.java:1535)
+	at com.microsoft.sqlserver.jdbc.SQLServerPreparedStatement.doExecutePreparedStatement(SQLServerPreparedStatement.java:467)
+	at com.microsoft.sqlserver.jdbc.SQLServerPreparedStatement$PrepStmtExecCmd.doExecute(SQLServerPreparedStatement.java:409)
+	at com.microsoft.sqlserver.jdbc.TDSCommand.execute(IOBuffer.java:7151)
+	at com.microsoft.sqlserver.jdbc.SQLServerConnection.executeCommand(SQLServerConnection.java:2478)
+	at com.microsoft.sqlserver.jdbc.SQLServerStatement.executeCommand(SQLServerStatement.java:219)
+	at com.microsoft.sqlserver.jdbc.SQLServerStatement.executeStatement(SQLServerStatement.java:199)
+	at com.microsoft.sqlserver.jdbc.SQLServerPreparedStatement.executeUpdate(SQLServerPreparedStatement.java:356)
+	at SqlServerUtils.callMaterialStoreProcedure(SqlServerUtils.java:163)
+	at SqlServerUtils$SPMaterialRunable.run(SqlServerUtils.java:311)
+	at java.lang.Thread.run(Thread.java:745)
+Call spMaterialByBatchID on thread id(35) takes 2791s
+Failed to callMaterialStoreProcedure spMaterialByBatchID.
+com.microsoft.sqlserver.jdbc.SQLServerException: 查询处理器未能为执行并行查询启动必要的线程资源。
+	at com.microsoft.sqlserver.jdbc.SQLServerException.makeFromDatabaseError(SQLServerException.java:258)
+	at com.microsoft.sqlserver.jdbc.SQLServerStatement.getNextResult(SQLServerStatement.java:1535)
+	at com.microsoft.sqlserver.jdbc.SQLServerPreparedStatement.doExecutePreparedStatement(SQLServerPreparedStatement.java:467)
+	at com.microsoft.sqlserver.jdbc.SQLServerPreparedStatement$PrepStmtExecCmd.doExecute(SQLServerPreparedStatement.java:409)
+	at com.microsoft.sqlserver.jdbc.TDSCommand.execute(IOBuffer.java:7151)
+	at com.microsoft.sqlserver.jdbc.SQLServerConnection.executeCommand(SQLServerConnection.java:2478)
+	at com.microsoft.sqlserver.jdbc.SQLServerStatement.executeCommand(SQLServerStatement.java:219)
+	at com.microsoft.sqlserver.jdbc.SQLServerStatement.executeStatement(SQLServerStatement.java:199)
+	at com.microsoft.sqlserver.jdbc.SQLServerPreparedStatement.executeUpdate(SQLServerPreparedStatement.java:356)
+	at SqlServerUtils.callMaterialStoreProcedure(SqlServerUtils.java:163)
+	at SqlServerUtils$SPMaterialRunable.run(SqlServerUtils.java:311)
+	at java.lang.Thread.run(Thread.java:745)
+Failed to callMaterialStoreProcedure spMaterialByBatchID.
+com.microsoft.sqlserver.jdbc.SQLServerException: 查询处理器未能为执行并行查询启动必要的线程资源。
+	at com.microsoft.sqlserver.jdbc.SQLServerException.makeFromDatabaseError(SQLServerException.java:258)
+	at com.microsoft.sqlserver.jdbc.SQLServerStatement.getNextResult(SQLServerStatement.java:1535)
+Call spMaterialByBatchID on thread id(16) takes 2991s
+	at com.microsoft.sqlserver.jdbc.SQLServerPreparedStatement.doExecutePreparedStatement(SQLServerPreparedStatement.java:467)
+	at com.microsoft.sqlserver.jdbc.SQLServerPreparedStatement$PrepStmtExecCmd.doExecute(SQLServerPreparedStatement.java:409)
+	at com.microsoft.sqlserver.jdbc.TDSCommand.execute(IOBuffer.java:7151)
+	at com.microsoft.sqlserver.jdbc.SQLServerConnection.executeCommand(SQLServerConnection.java:2478)
+	at com.microsoft.sqlserver.jdbc.SQLServerStatement.executeCommand(SQLServerStatement.java:219)
+	at com.microsoft.sqlserver.jdbc.SQLServerStatement.executeStatement(SQLServerStatement.java:199)
+	at com.microsoft.sqlserver.jdbc.SQLServerPreparedStatement.executeUpdate(SQLServerPreparedStatement.java:356)
+	at SqlServerUtils.callMaterialStoreProcedure(SqlServerUtils.java:163)
+	at SqlServerUtils$SPMaterialRunable.run(SqlServerUtils.java:311)
+	at java.lang.Thread.run(Thread.java:745)
