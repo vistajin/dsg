@@ -19,10 +19,8 @@ Select
     case when pre.unit<>a.Lunit and pre.unit='磅' then (pre.needqty-ISNULL(pre.cancleQty,0)-ISNULL(pre.cancleQty2,0))*a.sampleqty/a.conversion
          else (pre.needqty-ISNULL(pre.cancleQty,0)-ISNULL(pre.cancleQty2,0)) end preneedqty,
     (isnull(c.outlength,0)+ISNULL(d.sendlength,0)) bcklength,
-    case when a.storeno in ('B','C') and (a.avnoreslength-((case when pre.unit<>a.Lunit and pre.unit='磅' then pre.rtnqty*a.sampleqty/a.conversion
-         else pre.rtnqty end)-isnull(c.outlength,0)-ISNULL(d.sendlength,0))>=0) then ((case when pre.unit<>a.Lunit and pre.unit='磅' then pre.rtnqty*a.sampleqty/a.conversion else pre.rtnqty end)-isnull(c.outlength,0)-ISNULL(d.sendlength,0))
-         when a.storeno in ('B','C') and (a.avnoreslength-((case when pre.unit<>a.Lunit and pre.unit='磅' then pre.rtnqty*a.sampleqty/a.conversion
-                  else pre.rtnqty end)-isnull(c.outlength,0)-ISNULL(d.sendlength,0))<0) then a.avnoreslength
+    case when a.storeno in ('B','C') and (a.avnoreslength-((case when pre.unit<>a.Lunit and pre.unit='磅' then pre.rtnqty*a.sampleqty/a.conversion else pre.rtnqty end)-isnull(c.outlength,0)-ISNULL(d.sendlength,0))>=0) then ((case when pre.unit<>a.Lunit and pre.unit='磅' then pre.rtnqty*a.sampleqty/a.conversion else pre.rtnqty end)-isnull(c.outlength,0)-ISNULL(d.sendlength,0))
+         when a.storeno in ('B','C') and (a.avnoreslength-((case when pre.unit<>a.Lunit and pre.unit='磅' then pre.rtnqty*a.sampleqty/a.conversion else pre.rtnqty end)-isnull(c.outlength,0)-ISNULL(d.sendlength,0))<0) then a.avnoreslength
          when a.storeno in ('A') and (a.avnoreslength-(pre.rtnqty-isnull(c.outlength,0)-ISNULL(d.sendlength,0))>=0) then pre.rtnqty-isnull(c.outlength,0)-ISNULL(d.sendlength,0)
          when a.storeno in ('A') and (a.avnoreslength-(pre.rtnqty-isnull(c.outlength,0)-ISNULL(d.sendlength,0))<0) then a.avnoreslength
          else a.avnoreslength end as prerestqty
