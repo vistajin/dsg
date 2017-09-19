@@ -1,0 +1,2 @@
+See performance gains by using indexed views in SQL Server
+http://www.techrepublic.com/article/see-performance-gains-by-using-indexed-views-in-sql-server/
