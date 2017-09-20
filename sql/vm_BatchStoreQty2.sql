@@ -26,20 +26,20 @@ select
     --可用重量
     case when b.weight-isnull(e.qtyi,0)-isnull(i.qtyi,0)<0 then 0 else b.weight-isnull(e.qtyi,0)-isnull(i.qtyi,0) end avweight,
     --实际可用数量=库存-正常未出-预留未出-预留剩余
-    case WHEN isnull(f.length,0)-isnull(h.length,0) < 0 THEN b.length-isnull(e.length,0)
-         WHEN b.length-isnull(e.length,0)-isnull(i.length,0)-(isnull(f.length,0)-isnull(h.length,0)) < 0 THEN 0
-         else b.length-isnull(e.length,0)-isnull(i.length,0)-(isnull(f.length,0)-isnull(h.length,0))end as avnoreslength,
-    case WHEN isnull(f.qtyi,0)-isnull(h.qtyi,0) < 0 THEN b.weight-isnull(e.qtyi,0)
-         WHEN b.weight-isnull(e.qtyi,0)-isnull(i.qtyi,0)-(isnull(f.qtyi,0)-isnull(h.qtyi,0)) < 0 THEN 0
-         else b.weight-isnull(e.qtyi,0)-isnull(i.qtyi,0)-(isnull(f.qtyi,0)-isnull(h.qtyi,0)) end as avnoresweight,  --实际可用重量
+    case WHEN f.doclen-f.reslen < 0 THEN b.length-isnull(e.length,0)
+         WHEN b.length-isnull(e.length,0)-isnull(i.length,0)-(f.doclen-f.reslen) < 0 THEN 0
+         else b.length-isnull(e.length,0)-isnull(i.length,0)-(f.doclen-f.reslen)end as avnoreslength,
+    case WHEN f.docqtyi-f.resqtyi < 0 THEN b.weight-isnull(e.qtyi,0)
+         WHEN b.weight-isnull(e.qtyi,0)-isnull(i.qtyi,0)-f.docqtyi-f.resqtyi < 0 THEN 0
+         else b.weight-isnull(e.qtyi,0)-isnull(i.qtyi,0)-f.docqtyi-f.resqtyi end as avnoresweight,  --实际可用重量
     e.length as nochecknoreslen , --未审核(不包括领预留)|数量
     e.qtyi as nochecknoresweight,
-    h.length as reslylen , --预留|已领数量(b)
-    h.qtyi as reslyqtyi,
-    case when (isnull(f.length,0)-isnull(h.length,0)) > 0 then isnull(f.length,0)-isnull(h.length,0) else 0.0 end as reslensy, --预留|剩余数量(c=a-b)
-    case when (isnull(f.qtyi,0)-isnull(h.qtyi,0)) > 0 then isnull(f.qtyi,0)-isnull(h.qtyi,0) else 0.0 end as resweightsy,
-    f.length as reslen , --预留|最初数量(a)
-    f.qtyi as resweight,b.inoutdate,d.remark,d.CollectDate,d.DocNo as coldocno,d.turnoldragsdate,d.returndpt
+    f.reslen as reslylen , --预留|已领数量(b)
+    f.resqtyi as reslyqtyi,
+    case when (f.doclen-f.reslen) > 0 then f.doclen-f.reslen else 0.0 end as reslensy, --预留|剩余数量(c=a-b)
+    case when (f.docqtyi-f.resqtyi) > 0 then f.docqtyi-f.resqtyi else 0.0 end as resweightsy,
+    f.doclen as reslen , --预留|最初数量(a)
+    f.docqtyi as resweight,b.inoutdate,d.remark,d.CollectDate,d.DocNo as coldocno,d.turnoldragsdate,d.returndpt
 from materialbatchinfo (nolock) a
 left join MaterialStoreQty (nolock) b on b.BatchID=a.BatchID
 left join (
