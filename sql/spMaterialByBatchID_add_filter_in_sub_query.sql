@@ -54,7 +54,7 @@ alter  PROC [dbo].[spMaterialByBatchID]
                                                                                              
 as                                                                                                        
                                                                                              
-  declare @sql varchar(8000),@charenter varchar(5)                                                            
+  declare @sql varchar(max),@charenter varchar(5)                                                            
   declare @qx_12 bit                                         
   set @charenter=char(13)+char(10)                                  
   set @qx_12=ISNULL((select isnull(qx_7,0) from s_function where userid=@loginid and funcid='frmStockSendLL_msqDetaild'),0)                             
@@ -234,7 +234,7 @@ else pre.rtnqty end)-isnull(c.outlength,0)-ISNULL(d.sendlength,0))
             if @matdesc is not null set @sql=@sql+' and a.matdesc like '+@matdesc+@charenter
             if @Flag=1 set @sql=@sql+'  and isnull(a.locationid,'''')<>'''''+@charenter
 			if @Flag=2 set @sql=@sql+'  and isnull(a.locationid,'''')='''''+@charenter
-			if @storeno is not null set @sql=@sql+'  and a.storeno= '+@storeno+@charenter
+			--if @storeno is not null set @sql=@sql+'  and a.storeno= '+@storeno+@charenter
             ------------------------------------End add filter in subselect--------------------------------------    
             set @sql=@sql+'                                  
             group by c.pre_number,c.pre_line                                  
