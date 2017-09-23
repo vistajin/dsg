@@ -1,2 +1,6 @@
 See performance gains by using indexed views in SQL Server
 http://www.techrepublic.com/article/see-performance-gains-by-using-indexed-views-in-sql-server/
+
+
+需要我们了解的SQL Server阻塞原因与解决方法
+http://www.accessoft.com/blog/article-show.asp?userid=24010&Id=10815
