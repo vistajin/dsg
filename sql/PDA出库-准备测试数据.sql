@@ -20,18 +20,22 @@ update MaterialSend_DetailD set OutFlag=0,BatchID='B020017331L-01',BarcodeNo='SE
 
 
 -- 发送失败，该批次 B020017331L-01 库存为0，请检查！
+-- select * from MaterialStoreQty where BatchID='B020017331L-01';
+update MaterialStoreQty set Length = 9999.99, Weight=9999.99 where BatchID='B020017331L-01';
 /*SELECT a.BatchID
 FROM pdaoutcase a (nolock)
 LEFT JOIN MaterialSend_DetailD b(nolock) ON a.DocNo=b.DocNo AND a.BatchID=b.BatchID AND a.BarcodeNo = b.BarcodeNo
 LEFT JOIN MaterialStoreQty c(nolock) ON  a.BatchID=c.BatchID
 WHERE (ISNULL(c.[Length],0)<=0 OR ISNULL(c.Weight,0)<=0) AND a.DocNo='SED99900CEUQ' */
 
+--exec sp_pdaoutcasecommit 'SED99900CEUQ'
+----------- /patch data to run PDA out store----------
 
 
 
 
 
-
+/*
 select * from pdaoutcase where DocNo = 'SED99900CEUQ';
 update pdaoutcase set DocNo = 'SED99900CEUQ' where DocNo = 'SED99900CEUQ-bak'; --B020017331L-01/SED99900CEUQ-18
                                                                                --B020029424H-01/SED99900CEUQ-36
@@ -68,4 +72,4 @@ WHERE a.DocNo='SED99900CEUQ' AND b.DocNo IS NULL)
 
 select *from  MaterialSend_head where DocNo='SED99900CEUQ'
 exec sp_pdaoutcasecommit 'SED99900CEUQ'
------------ /patch data to run PDA out store----------
+*/
