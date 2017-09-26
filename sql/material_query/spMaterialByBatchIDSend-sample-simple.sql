@@ -4,7 +4,7 @@ from vm_batchstoreqty a
 left join req_detaild(nolock) reqd on a.orderserial=reqd.req_serial and a.line=reqd.req_line
 left join  MaterialLocationInfo(nolock) k  on a.LocationID = k.locationID
 where a.isoldmat=1 and a.storelength>0 and a.storeweight>0 and a.avnoreslength >0 and a.avnoresweight>0 and k.lockflag=0
-and a.BatchID  like '%18EK-PWS0172%'
+and a.MatNo  like '%18EK-PWS0172%'
 
 ---------------------------------------------------------------
 select * into #tmpmaterialsend from (
@@ -32,7 +32,7 @@ from vm_batchstoreqty a
 left join req_detaild reqd(nolock) on a.orderserial=reqd.req_serial and a.line=reqd.req_line
 left join  MaterialLocationInfo (nolock) k  on a.LocationID = k.locationID
 where a.isoldmat=0 and a.storelength>0 and a.storeweight>0 and a.avnoreslength >0 and a.avnoresweight>0 and k.lockflag=0
-and a.BatchID  like '%18EK-PWS0172%'
+and a.MatNo  like '%18EK-PWS0172%'
 )
 
 select * from #tmpmaterialsend

@@ -12,7 +12,7 @@ left join (
     left join MaterialOut_Head b on b.DocNo=a.DocNo
     left join MaterialSend_DetailD c on c.DocNo=b.SendNo and c.BatchID=a.BatchID
     where c.resno is null and b.SendNo not like 'BCK%' and c.pre_number is not null
-        and a.MatNo like '18EK-PWS0172%'
+        and a.MatNo like '%18EK-PWS0172%'
     group by c.pre_number,c.pre_line) c on c.pre_number=reqd.pre_number and c.pre_line=reqd.pre_line
 left join (
     Select a.pre_number,a.pre_line,SUM(length) as sendlength
@@ -23,6 +23,6 @@ left join (
     group by a.pre_number,a.pre_line) d on d.pre_number=reqd.pre_number and d.pre_line=reqd.pre_line  --未出库	
 where 1=1 and a.storelength>0 and a.storeweight>0 and a.avnoreslength>0 and a.avnoresweight>0
       and (k.lockflag is null or k.lockflag<>'1')
-      and a.MatNo like '18EK-PWS0172%'
+      and a.MatNo like '%18EK-PWS0172%'
 
 select * from #tmpmaterialsend
