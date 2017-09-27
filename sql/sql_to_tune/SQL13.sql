@@ -1,3 +1,4 @@
+--
 select distinct b.docno as recno,a.checkdate as colindate,a.docno,a.doctype,ad.length,ad.lunit,ad.weight,ad.wunit,ad.batchid,ad.conversion,a.inuser as colinuser,a.checkflag colcheckflag,                                        
                    a.checkdate  collectdate,ad.remark,i.username ,ad.turnoldragsflag,ad.turnoldragsdate,ad.turnoldragsuserid,ad.turnoldragsusername,    
                    a.printdate,a.printuser,a.printcount,                                         
