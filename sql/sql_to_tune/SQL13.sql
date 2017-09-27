@@ -10,12 +10,12 @@ Left join (
 			c.det_number,cd.rev_number,cd.orderserial,cd.orderline,c.checkdate,c.checkdate as qadate,cd.styleflag,cd.returnflag,cd.ratify,c.inuser as qainuser,cd.ratifyuser,cd.ratifydate,case when cd.result2date is not null then cd.unqualified2 else cd.unqualified end as unqualified,case when cd.result2date is not null then cd.result2 else cd.result end as result,case when cd.result2date is not null then cd.result2date when cd.resultdate is not null then cd.resultdate else c.checkdate end as dsgcheckdate
 		from dsg_checkout_head(nolock) c
 		left join dsg_checkout_detail(nolock) cd on cd.det_number=c.det_number) X
-inner join (
-	select 
-		cd.rev_number,cd.orderserial,cd.orderline,MAX(case when cd.result2date is not null then cd.result2date when cd.resultdate is not null then cd.resultdate else c.checkdate end) as dsgcheckdate
-	from dsg_checkout_head(nolock) c
-	left join dsg_checkout_detail(nolock) cd on cd.det_number=c.det_number
-	group by cd.rev_number,cd.orderserial,cd.orderline) w on w.rev_number=x.rev_number and w.orderserial=x.orderserial and w.orderline=x.orderline and w.dsgcheckdate=x.dsgcheckdate) Y on Y.rev_number=dd.rev_number and Y.orderserial=dd.req_serial and Y.orderline=dd.req_line
+	inner join (
+		select 
+			cd.rev_number,cd.orderserial,cd.orderline,MAX(case when cd.result2date is not null then cd.result2date when cd.resultdate is not null then cd.resultdate else c.checkdate end) as dsgcheckdate
+		from dsg_checkout_head(nolock) c
+		left join dsg_checkout_detail(nolock) cd on cd.det_number=c.det_number
+		group by cd.rev_number,cd.orderserial,cd.orderline) w on w.rev_number=x.rev_number and w.orderserial=x.orderserial and w.orderline=x.orderline and w.dsgcheckdate=x.dsgcheckdate) Y on Y.rev_number=dd.rev_number and Y.orderserial=dd.req_serial and Y.orderline=dd.req_line
 left join MaterialReceivble_Head(nolock) b on b.rev_number=dd.rev_number and b.orderserial=dd.req_serial  and b.OrderLine=dd.req_line
 left join MaterialReceivble_detail(nolock) bd on bd.docno=b.docno --and bd.line=dd.req_line
 left join MaterialCollect_detail(nolock) ad on ad.BatchID=bd.BatchID
