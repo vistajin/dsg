@@ -1,9 +1,9 @@
 --
 SET DEADLOCK_PRIORITY LOW/NORMAL/HIGHT/-10~10
 
-Dbcc traceon (1204,-1) 
+Dbcc traceon (1204,-1)
 
-DBCC Traceon (1222,-1) 
+DBCC Traceon (1222,-1)
 
 select * from sys.sysprocesses where blocked > 0
 SELECT Blocker.text --, Blocker.*, *
@@ -95,7 +95,7 @@ WHILE @Tries <= 3
 --master.dbo.sysprocesses and its compatibility view sys.sysprocesses are deprecated, so use this instead:
 select session_id from sys.dm_exec_sessions
 
--- Check SQL Server Schedulers 
+-- Check SQL Server Schedulers
 SELECT scheduler_id, current_tasks_count, runnable_tasks_count
 FROM sys.dm_os_schedulers
 WHERE scheduler_id < 255
@@ -116,7 +116,7 @@ ON waits.session_id = blocking_query.session_id
 
 
 -- Clear Wait Stats
-DBCC SQLPERF('sys.dm_os_wait_stats', CLEAR); 
+DBCC SQLPERF('sys.dm_os_wait_stats', CLEAR);
 
 -- Isolate top waits
 WITH Waits AS
@@ -156,6 +156,8 @@ status = 'VISIBLE ONLINE';
 select cpu_count,hyperthread_ratio, scheduler_count,scheduler_total_count, max_workers_count
 from sys.dm_os_sys_info;
 
+Sp_serv
+er_diagnostics
 
 -- Turn on advanced options
 EXEC sp_configure 'Show Advanced Options', 1
@@ -170,6 +172,90 @@ GO
 RECONFIGURE
 GO
 
+
+EXEC sp_configure 'Show Advanced Options', 1
+GO
+RECONFIGURE
+GO
+sp_configure 'max worker threads'
+
+SELECT max_workers_count FROM sys.dm_os_sys_info
+SELECT SUM(current_workers_count) as [Current worker thread] FROM sys.dm_os_schedulers
+--If on average such value is above 1 then you might benefit from adding more threads to the system
+select AVG (work_queue_count) from sys.dm_os_schedulers where status = 'VISIBLE ONLINE'
+
+--the following query will provide information about the system tasks that have spawned the additional threads.
+SELECT
+s.session_id,
+r.command,
+r.status,
+r.wait_type,
+r.scheduler_id,
+w.worker_address,
+w.is_preemptive,
+w.state,
+t.task_state,
+t.session_id,
+t.exec_context_id,
+t.request_id
+FROM sys.dm_exec_sessions AS s
+INNER JOIN sys.dm_exec_requests AS r
+    ON s.session_id = r.session_id
+INNER JOIN sys.dm_os_tasks AS t
+    ON r.task_address = t.task_address
+INNER JOIN sys.dm_os_workers AS w
+    ON t.worker_address = w.worker_address
+WHERE s.is_user_process = 0;
+
+select  is_user_process,count(*) as RequestCount from sys.dm_exec_sessions s
+inner join sys.dm_exec_requests r
+on s.session_id = r.session_id
+group by is_user_process
+
+
+;with cte as
+(
+       select
+              s.is_user_process,
+             w.worker_address,
+              w.is_preemptive,
+              w.state,
+              r.status,
+              t.task_state,
+              r.command,
+              w.last_wait_type,
+              t.session_id,
+              t.exec_context_id,
+              t.request_id
+       from dm_exec_sessions s
+       inner join dm_exec_requests r
+       on s.session_id = r.session_id
+       inner join dm_os_tasks t
+       on r.task_address = t.task_address
+       inner join dm_os_workers w
+       on t.worker_address = w.worker_address
+       where s.is_user_process = 0
+)
+select
+       is_user_process,command,
+       last_wait_type,
+       count(*) as cmd_cnt
+from cte
+group by is_user_process,command, last_wait_type
+order by cmd_cnt desc
+
+--https://blogs.msdn.microsoft.com/sql_pfe_blog/2013/07/01/are-my-actual-worker-threads-exceeding-the-sp_configure-max-worker-threads-value/
+-- available groups
+select count(*)as NumAvailabilityGroups from sys.availability_groups
+
+--available workers
+select scheduler_id,current_tasks_count,current_workers_count,active_workers_count,work_queue_count
+from sys.dm_os_schedulers
+where status = 'Visible Online'
+
+select is_preemptive,state,last_wait_type,count(*) as NumWorkers from sys.dm_os_workers
+Group by state,last_wait_type,is_preemptive
+order by count(*) desc
 
 --https://social.msdn.microsoft.com/Forums/sqlserver/en-US/b67f7f3b-6e23-4552-846b-1ec981f814fc/performance-issue-worker-threads-ccassionally-run-out-then-sql-server-rejects-connections?forum=sqldatabaseengine
 
