@@ -1,3 +1,8 @@
+
+--Get CPU count
+select max_workers_count,scheduler_count,cpu_count,hyperthread_ratio from sys.dm_os_sys_info
+
+
 --
 SET DEADLOCK_PRIORITY LOW/NORMAL/HIGHT/-10~10
 
@@ -183,6 +188,9 @@ SELECT max_workers_count FROM sys.dm_os_sys_info
 SELECT SUM(current_workers_count) as [Current worker thread] FROM sys.dm_os_schedulers
 --If on average such value is above 1 then you might benefit from adding more threads to the system
 select AVG (work_queue_count) from sys.dm_os_schedulers where status = 'VISIBLE ONLINE'
+
+
+--http://www.faceofit.com/how-to-resolve-max-worker-threads-issues-in-sql-server/
 
 --the following query will provide information about the system tasks that have spawned the additional threads.
 SELECT
