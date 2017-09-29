@@ -40,8 +40,7 @@ select distinct * from (
         a1.reqpriceapplydsgconfirmflag,a1.iedsgflag,a1.ifhighjjpriceflag,b.supply_colorname,b.supply_colordesc,b.isbefflag,
         b.orderbakdate,b.isorderluseflag, b.qtyotherorder,isnull(c.payflag,0) as payflag,c.dsgmbp_number,d.rtndate,d.confirmsenddate,
         case when ISNULL(f.item_series,'')<>'' then isnull(f.deliverytime1,0) when ISNULL(g.item_series,'')<>'' then isnull(g.deliverytime1,0) when ISNULL(e.item_series,'')<>'' then isnull(e.deliverytime1,0) end as time1,
-        case when ISNULL(f.item_series,'')<>'' then isnull(f.deliverytime2,0) when ISNULL(g.item_series,'')<>'' then isnull(g.deliverytime2,0) when ISNULL(e.item_series,'')<>'' then isnull(e.deliverytime2,0) end as time2,\
-        ase when ISNULL(f.item_series,'')<>'' then isnull(f.deliverytime3,0) when ISNULL(g.item_series,'')<>'' then isnull(g.deliverytime3,0)  when  ISNULL(e.item_series,'')<>'' then isnull(e.deliverytime3,0) end as time3,d.toinlocatedate,
+        case when ISNULL(f.item_series,'')<>'' then isnull(f.deliverytime2,0) when ISNULL(g.item_series,'')<>'' then isnull(g.deliverytime2,0) when ISNULL(e.item_series,'')<>'' then isnull(e.deliverytime2,0) end as time2,case when ISNULL(f.item_series,'')<>'' then isnull(f.deliverytime3,0) when ISNULL(g.item_series,'')<>'' then isnull(g.deliverytime3,0)  when  ISNULL(e.item_series,'')<>'' then isnull(e.deliverytime3,0) end as time3,d.toinlocatedate,
         b.minoyearprice as minprice,b.minoyearcacprice as mincacprice,b.Banbu_engkaifa_price1,b.Banbu_engkaifa_price2,b.jjprice,
         b.remotematcode,f1.poindate,f1.poconfirmdate,i.revconfirmdate,j.ysindate,j.rkdate,l.qacheckdate,a1.base_itemcode,
         a.req_serial+b.item_code+b.color_name as pid,
