@@ -2,6 +2,20 @@
 --Get CPU count
 select max_workers_count,scheduler_count,cpu_count,hyperthread_ratio from sys.dm_os_sys_info
 
+--https://blogs.msdn.microsoft.com/apgcdsd/2012/11/27/sql-server-worker-threads/
+--让我们来谈谈一个有趣的话题。我的SQL server 的worker threads是否够用？如何判断SQL server 用光了所有的worker threads?
+--一个简单的方法就是查询DMV sys.dm_os_schedulers：
+SELECT    scheduler_id,   cpu_id,  current_tasks_count,   runnable_tasks_count,   current_workers_count,   active_workers_count,   work_queue_count
+FROM sys.dm_os_schedulers
+WHERE scheduler_id < 255
+--其中的work_queue_count表示正在等待worker 的task数 
+--如果这个值一直大于0，那么说明没有可用的worker threads了。这个时候如果runnable_tasks_count很大，那么一般意味着SQL Sever有某种性能瓶颈，或者是严重过载了。 
+--------------------------------------------------
+
+--是否有task等待worker  thread
+select * from sys.dm_os_tasks where task_state='PENDING'
+--如果上面语句有输出，那么就表示有task 等待worker去执行。
+
 
 --
 SET DEADLOCK_PRIORITY LOW/NORMAL/HIGHT/-10~10
