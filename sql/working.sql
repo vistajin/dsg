@@ -193,3 +193,17 @@ INSERT INTO [dsg_test].[dbo].[MaterialSend_DetailD]
 GO
 
 
+
+--订单号+物料编号+色号可以对应多个批号
+select orderno, MatNo,colorID, COUNT(1)as c
+from materialPasterColor_detaild(nolock)
+where LastBatchID > ''
+GROUP BY orderno, MatNo,colorID
+having COUNT(1) > 1
+order by c desc
+
+select LastBatchID 
+from materialPasterColor_detaild(nolock)
+WHERE orderno ='POS17-037070'
+	  AND MatNo='16FK-WYS0112' AND colorID='03-007' 
+GROUP BY LastBatchID
