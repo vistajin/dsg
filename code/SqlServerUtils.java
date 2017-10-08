@@ -7,7 +7,7 @@
  * language in any way or for any other purposes whatsoever without the prior
  * written consent of HSBC Holdings plc.
  */
-package dsg;
+package com.dsg.export;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -161,10 +161,11 @@ public class SqlServerUtils {
 		HSSFWorkbook wb = new HSSFWorkbook();
 		HSSFSheet sheet = wb.createSheet("sheet1");
 		try {
-			conn = getConnection();
-			ps = conn.prepareStatement("select * from t_export where id > ? order by id");
-			ps.setInt(1, 1);
-			ResultSet rs = ps.executeQuery();
+			conn = getConnection();			
+			CallableStatement cs = conn.prepareCall("{call sp_export(?)}");
+			cs.setInt(1, 1);
+			ResultSet rs = cs.executeQuery();
+			long start = System.currentTimeMillis();
 			int rowNum = 0;
 			int colNum = 0;
 			while (rs.next()) {
@@ -178,9 +179,12 @@ public class SqlServerUtils {
 				rowNum++;
 			}
 			rs.close();
-			FileOutputStream os = new FileOutputStream("F:\\PROJECT\\sql2008tune\\code\\export\\workbook.xls");
+			
+			FileOutputStream os = new FileOutputStream("F:\\PROJECT\\sql2008tune\\code\\export\\export-svlt.xls");
 			wb.write(os);
 			os.close();
+			long end = System.currentTimeMillis();
+			System.out.println("Write excel file spend: " + (end - start));
 		} catch (Exception e) {
 			System.err.println("Failed to export.");
 			e.printStackTrace();
